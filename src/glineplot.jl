@@ -9,6 +9,9 @@ function glineplot(x, y;
     yerr = nothing,
     color = rgb("canard"), # Relies on the previously defined rgb() function
     linewidth = 1.5,
+    linestyle = :solid,
+    joinstyle = :round,
+    linecap=:round,
     xlabel = "",
     ylabel = "",
     figposition = (560, 420), # Converted from MATLAB's [left bottom width height] to Makie's (width, height)
@@ -36,8 +39,8 @@ function glineplot(x, y;
             backgroundcolor = background_color,
             xlabel = xlabel, 
             ylabel = ylabel,
-            xlabelsize = 16, 
-            ylabelsize = 16,
+            xlabelsize = 20, 
+            ylabelsize = 20,
             xlabelcolor = text_color, 
             ylabelcolor = text_color,
             xtickcolor = text_color, 
@@ -79,7 +82,7 @@ function glineplot(x, y;
     
 
     # Plot line
-    lp = plot!(ax,x_plot,y_plot, color = color, linewidth = linewidth)
+    lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap)
 
 
 
@@ -91,5 +94,5 @@ function glineplot(x, y;
         ylims!(ax, ylim[1], ylim[2])
     end
 
-    return fig, ax, hcb
+    return fig, ax
 end
