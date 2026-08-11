@@ -1,2 +1,3 @@
 # gprettyplots
-useful plorring functions in julia
+
+[![Build Status](https://github.com/GRaynaud/gprettyplots.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/GRaynaud/gprettyplots.jl/actions/workflows/CI.yml?query=branch%3Amain)
