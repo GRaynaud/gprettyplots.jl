@@ -1,9 +1,11 @@
 """
     glineplot(x, y; kwargs...)
 
-A wrapper to make a quick and pretty scatter plot in CairoMakie, mapping directly 
-to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax, hcb)`.
+A wrapper to make a quick and pretty scatter plot in GLMakie, mapping directly 
+to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax)`.
 """
+include("rgb.jl")
+
 function glineplot(x, y;
     xerr = nothing,
     yerr = nothing,
@@ -19,7 +21,9 @@ function glineplot(x, y;
     ylim = nothing,
     plotindex = nothing,
     dark_mode = false,
-    figurehandle = nothing
+    figurehandle = nothing,
+    label = nothing,
+    kwargs...
 )
     # Define color scheme based on dark_mode[cite: 3]
     if dark_mode
@@ -82,7 +86,7 @@ function glineplot(x, y;
     
 
     # Plot line
-    lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap)
+    lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap, label=label; kwargs...)
 
 
 
