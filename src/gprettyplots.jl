@@ -298,7 +298,7 @@ end
     gscatterplot(x, y; kwargs...)
 
 A wrapper to make a quick and pretty scatter plot in CairoMakie, mapping directly 
-to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax, hcb)`.
+to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax, sc, hcb)`.
 """
 function gscatterplot(x, y;
     xerr = nothing,
@@ -419,14 +419,14 @@ function gscatterplot(x, y;
         ylims!(ax, ylim[1], ylim[2])
     end
 
-    return fig, ax, hcb
+    return fig, ax, sc, hcb
 end
 
 """
     glineplot(x, y; kwargs...)
 
 A wrapper to make a quick and pretty scatter plot in GLMakie, mapping directly 
-to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax)`.
+to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax, lp)`.
 """
 
 function glineplot(x, y;
@@ -509,7 +509,7 @@ function glineplot(x, y;
     
 
     # Plot line
-    lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap, label=label; kwargs...)
+    lp = lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap, label=label; kwargs...)
 
 
 
@@ -521,7 +521,7 @@ function glineplot(x, y;
         ylims!(ax, ylim[1], ylim[2])
     end
 
-    return fig, ax
+    return fig, ax, lp
 end
 
 end
