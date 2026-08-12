@@ -428,7 +428,6 @@ end
 A wrapper to make a quick and pretty scatter plot in GLMakie, mapping directly 
 to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax)`.
 """
-include("rgb.jl")
 
 function glineplot(x, y;
     xerr = nothing,
