@@ -1,5 +1,7 @@
 module gprettyplots
 
+export rgb, kcolormap, gscatterplot, glineplot
+
 using GLMakie
 using Colors
 #include("rgb.jl")
