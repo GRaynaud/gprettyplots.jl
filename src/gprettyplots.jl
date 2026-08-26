@@ -442,6 +442,8 @@ function glineplot(x, y;
     xlabel = "",
     ylabel = "",
     figposition = (560, 420), # Converted from MATLAB's [left bottom width height] to Makie's (width, height)
+    errorband_color = rgb("perle"),
+    errorband_alpha = 0.5,
     xlim = nothing,
     ylim = nothing,
     plotindex = nothing,
@@ -500,13 +502,9 @@ function glineplot(x, y;
     y_plot = y[pti]
 
     # Plot errorbars in the background[cite: 3]
-    if !isnothing(xerr)
-        x_err_plot = xerr isa AbstractArray ? xerr[pti] : xerr
-        errorbars!(ax, x_plot, y_plot, x_err_plot, direction = :x, color = errorbar_color)
-    end
     if !isnothing(yerr)
         y_err_plot = yerr isa AbstractArray ? yerr[pti] : yerr
-        errorbars!(ax, x_plot, y_plot, y_err_plot, direction = :y, color = errorbar_color)
+        band!(ax, x_plot, y_plot .- y_err_plot, y_plot .+ y_err_plot, color = errorband_color, alpha = errorband_alpha)
     end
     
 
@@ -524,6 +522,10 @@ function glineplot(x, y;
     end
 
     return fig, ax, lp
+end
+
+function glineplot(y; kwargs...)
+    return glineplot(1:length(y),y; kwargs)
 end
 
 end
