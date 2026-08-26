@@ -7,7 +7,6 @@ to the MATLAB gscatterplot functionality. Returns a tuple `(fig, ax)`.
 include("rgb.jl")
 
 function glineplot(x, y;
-    xerr = nothing,
     yerr = nothing,
     color = rgb("canard"), # Relies on the previously defined rgb() function
     linewidth = 1.5,
@@ -17,6 +16,8 @@ function glineplot(x, y;
     xlabel = "",
     ylabel = "",
     figposition = (560, 420), # Converted from MATLAB's [left bottom width height] to Makie's (width, height)
+    errorband_color = rgb("perle"),
+    errorband_alpha = 0.5,
     xlim = nothing,
     ylim = nothing,
     plotindex = nothing,
@@ -29,11 +30,9 @@ function glineplot(x, y;
     if dark_mode
         text_color = rgb("white")
         background_color = rgb("black")
-        errorbar_color = rgb("white")
     else    
         text_color = rgb("black")
         background_color = rgb("white")
-        errorbar_color = rgb("black")
     end
 
     # Handle figure and axis generation[cite: 3]
@@ -75,13 +74,9 @@ function glineplot(x, y;
     y_plot = y[pti]
 
     # Plot errorbars in the background[cite: 3]
-    if !isnothing(xerr)
-        x_err_plot = xerr isa AbstractArray ? xerr[pti] : xerr
-        errorbars!(ax, x_plot, y_plot, x_err_plot, direction = :x, color = errorbar_color)
-    end
     if !isnothing(yerr)
         y_err_plot = yerr isa AbstractArray ? yerr[pti] : yerr
-        errorbars!(ax, x_plot, y_plot, y_err_plot, direction = :y, color = errorbar_color)
+        band!(ax, x_plot, y_plot - y_err_plot, y_plot + y_err_plot, color = errorband_color, alpha = errorband_alpha)
     end
     
 
@@ -99,4 +94,8 @@ function glineplot(x, y;
     end
 
     return fig, ax
+end
+
+function glineplot(y; kwargs...)
+    return glineplot(1:length(y),y; kwargs)
 end
