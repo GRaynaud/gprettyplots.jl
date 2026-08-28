@@ -1,6 +1,6 @@
 module gprettyplots
 
-export rgb, kcolormap, gscatterplot, glineplot
+export rgb, kcolormap, gscatterplot, glineplot, gsave
 
 using GLMakie
 using Colors
@@ -528,4 +528,20 @@ function glineplot(y; kwargs...)
     return glineplot(1:length(y),y; kwargs)
 end
 
+
+function gsave(fig::Figure,filename::Union{String,Char};px_per_unit=3.0, transparent_bkgd = true, transparent_color = "white")
+    
+    save(filename,fig, px_per_unit=px_per_unit)
+    if transparent_bkgd
+        run(`convert $filename -transparent $transparent_color $filename`)
+    end
+    return fig
 end
+
+
+function gsave(fig::Figure,foldername::Union{String,Char},filename::Union{String,Char};px_per_unit=3.0, transparent_bkgd = true, transparent_color = "white")
+    gsvae(fig,joinpath(foldername,filename),px_per_unit=px_per_unit,transparent_bkgd=transparent_bkgd,transparent_color=transparent_color)
+end
+
+end
+
