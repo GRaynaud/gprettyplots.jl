@@ -525,7 +525,7 @@ function glineplot(x, y;
 end
 
 function glineplot(y; kwargs...)
-    return glineplot(1:length(y),y; kwargs)
+    return glineplot(1:length(y),y; kwargs...)
 end
 
 
@@ -540,7 +540,7 @@ end
 
 
 function gsave(fig::Figure,foldername::Union{String,Char},filename::Union{String,Char};px_per_unit=3.0, transparent_bkgd = true, transparent_color = "white")
-    gsvae(fig,joinpath(foldername,filename),px_per_unit=px_per_unit,transparent_bkgd=transparent_bkgd,transparent_color=transparent_color)
+    gsave(fig,joinpath(foldername,filename),px_per_unit=px_per_unit,transparent_bkgd=transparent_bkgd,transparent_color=transparent_color)
 end
 
 end
