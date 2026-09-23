@@ -310,16 +310,19 @@ function gscatterplot(x, y;
     xlabel = "",
     ylabel = "",
     figposition = (560, 420), # Converted from MATLAB's [left bottom width height] to Makie's (width, height)
-    sz = 15, # Makie markersizes scale slightly differently than MATLAB, so you may need to adjust this default
+    sz = 12, # Makie markersizes scale slightly differently than MATLAB, so you may need to adjust this default
     colormap = nothing,
     colorbar = false,
     colorbartitle = "",
+    colorbarposition = missing,
     marker = :circle, # MATLAB 'o' equates to Makie's :circle[cite: 3]
     xlim = nothing,
     ylim = nothing,
     plotindex = nothing,
     dark_mode = false,
-    figurehandle = nothing
+    figurehandle = nothing,
+    label = nothing,
+    kwargs...
 )
     # Define color scheme based on dark_mode[cite: 3]
     if dark_mode
@@ -399,14 +402,23 @@ function gscatterplot(x, y;
         scatter_kwargs[:colormap] = colormap
     end
 
+    if !ismissing(label)
+        scatter_kwargs[:label] = label
+    end
+
+    merge!(scatter_kwargs, kwargs)
+
     # Plot scatter graph[cite: 3]
     sc = scatter!(ax, x_plot, y_plot; scatter_kwargs...)
 
     # Prepare colorbar/colormap[cite: 3]
     hcb = nothing
     if colorbar || colorbartitle != ""
+        if ismissing(colorbarposition)
+            colorbarposition = fig[1,2]
+        end
         # You can use Makie's L"..." string macro if you need LaTeX interpretation in the label later[cite: 3]
-        hcb = Colorbar(fig[1, 2], sc, label = colorbartitle,
+        hcb = Colorbar(colorbarposition, sc, label = colorbartitle,
             labelsize = 14, 
             labelcolor = text_color, 
             ticklabelcolor = text_color
@@ -444,6 +456,7 @@ function glineplot(x, y;
     figposition = (560, 420), # Converted from MATLAB's [left bottom width height] to Makie's (width, height)
     errorband_color = rgb("perle"),
     errorband_alpha = 0.5,
+    marker = nothing,
     xlim = nothing,
     ylim = nothing,
     plotindex = nothing,
@@ -488,11 +501,15 @@ function glineplot(x, y;
 
     # Filter data by plotindex[cite: 3]
     if !isnothing(plotindex)
-        # Assertions to ensure plotindex contains strictly positive integers within bounds[cite: 3]
-        @assert all(isinteger.(plotindex)) "plotindex contains non integer values"
-        @assert maximum(plotindex) <= length(x) "plotindex contains values greater than the length of submitted data"
-        @assert minimum(plotindex) > 0 "plotindex contains non-strictly positive values"
-        pti = Int.(plotindex)
+        if isempty(plotindex)
+            pti = []
+        else
+            # Assertions to ensure plotindex contains strictly positive integers within bounds[cite: 3]
+            @assert all(isinteger.(plotindex)) "plotindex contains non integer values"
+            @assert maximum(plotindex) <= length(x) "plotindex contains values greater than the length of submitted data"
+            @assert minimum(plotindex) > 0 "plotindex contains non-strictly positive values"
+            pti = Int.(plotindex)
+        end
     else
         pti = 1:length(x)
     end
@@ -507,6 +524,9 @@ function glineplot(x, y;
         band!(ax, x_plot, y_plot .- y_err_plot, y_plot .+ y_err_plot, color = errorband_color, alpha = errorband_alpha)
     end
     
+    if !isnothing(marker)
+        scatter!(ax, x_plot,y_plot; marker=marker, color=color, strokecolor=rgb("black"), strokewidth=1.0)
+    end
 
     # Plot line
     lp = lines!(ax,x_plot,y_plot, color = color, linewidth = linewidth, linestyle=linestyle, joinstyle=joinstyle, linecap=linecap, label=label; kwargs...)
@@ -526,6 +546,10 @@ end
 
 function glineplot(y; kwargs...)
     return glineplot(1:length(y),y; kwargs...)
+end
+
+function gscatterplot(y; kwargs...)
+    return gscatterplot(1:length(y),y; kwargs...)
 end
 
 
