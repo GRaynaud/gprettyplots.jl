@@ -322,6 +322,7 @@ function gscatterplot(x, y;
     dark_mode = false,
     figurehandle = nothing,
     label = nothing,
+    markeredgelinewidth = 1.0,
     kwargs...
 )
     # Define color scheme based on dark_mode[cite: 3]
@@ -396,7 +397,7 @@ function gscatterplot(x, y;
         :markersize => s_plot,
         :marker => m_shape,
         :strokecolor => edgecolor,
-        :strokewidth => 1.0 # Requires an explicit stroke width in Makie to show the edge color
+        :strokewidth => markeredgelinewidth # Requires an explicit stroke width in Makie to show the edge color
     )
     if !isnothing(colormap)
         scatter_kwargs[:colormap] = colormap
@@ -406,10 +407,10 @@ function gscatterplot(x, y;
         scatter_kwargs[:label] = label
     end
 
-    merge!(scatter_kwargs, kwargs)
+    #merge!(kwargs, scatter_kwargs)
 
     # Plot scatter graph[cite: 3]
-    sc = scatter!(ax, x_plot, y_plot; scatter_kwargs...)
+    sc = scatter!(ax, x_plot, y_plot; merge(kwargs,scatter_kwargs)...)
 
     # Prepare colorbar/colormap[cite: 3]
     hcb = nothing
